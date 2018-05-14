@@ -1,0 +1,41 @@
+enum ProcessStatus {
+    NOTEXIST = 0;
+    PENDING = 1;
+    STARTING = 2;
+    RUNNING = 3;
+    TERMINATING = 4;
+}
+
+enum ResourceType {
+    BINARY = 0;
+    DOCKER = 1;
+    OTHER = 2;
+};
+
+enum LaunchProcessStatus {
+    LAUNCH_SUCCESS = 0;
+    FAILURE_RESOURCE_NOT_EXIST = 1;
+    FAILURE_LAUNCH_ERROR = 2;
+};
+
+enum StopProcessStatus {
+    STOP_SUCCESS = 0;
+    FAILURE_PROCESS_NOT_EXIST = 1;
+    FAILURE_STOP_ERROR = 2;
+};
+
+message ResourceInfo {
+    required string srcLocation = 1;
+    required string dstLocation = 2;
+    required string entrance = 3;
+    required ResourceType resourceType = 4;
+}
+
+message ProcessInfo {
+    required string processId = 1;
+    required int32 cpu = 2;
+    required int32 memory = 3;
+    required int32 disk = 4;
+    required int64 timeSinceStartedInMs = 5;
+    required ProcessStatus processStatus = 6 [default = NOTEXIST];
+}

@@ -1,0 +1,33 @@
+import "common.proto";
+
+option cc_generic_services = false;
+
+message LaunchProcessRequest {
+    required ResourceInfo resourceInfo = 1;
+}
+
+message LaunchProcessResponse {
+    required LaunchProcessStatus status = 1;
+}
+
+message StopProcessRequest {
+    required string processId = 1;
+}
+
+message StopProcessResponse {
+    required StopProcessStatus status = 1;
+}
+
+message ListProcessesInfoRequest {
+    required string processIdPrefix = 1;
+}
+
+message ListProcessesInfoResponse {
+    repeated ProcessInfo processesInfo = 1;
+}
+
+service SupervisorService {
+    rpc Start(LaunchProcessRequest) returns (LaunchProcessResponse) {}
+    rpc Stop(StopProcessRequest) returns (StopProcessResponse) {}
+    rpc ListProcesses(ListProcessesInfoRequest) returns (ListProcessesInfoResponse) {}
+}
