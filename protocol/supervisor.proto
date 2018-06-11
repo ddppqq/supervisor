@@ -26,8 +26,26 @@ message ListProcessesInfoResponse {
     repeated ProcessInfo processesInfo = 1;
 }
 
+message HeartbeatRequest {
+    required ProcessInfo processinfo = 1;
+}
+
+message HeartbeatResponse {
+    required string msg = 1;
+}
+
+message PingRequest {
+    required string request = 1;
+}
+
+message PingResponse {
+    required string response = 1;
+}
+
 service SupervisorService {
     rpc Start(LaunchProcessRequest) returns (LaunchProcessResponse) {}
     rpc Stop(StopProcessRequest) returns (StopProcessResponse) {}
     rpc ListProcesses(ListProcessesInfoRequest) returns (ListProcessesInfoResponse) {}
+    rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse) {}
+    rpc Ping(PingRequest) returns (PingResponse) {}
 }

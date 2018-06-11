@@ -92,7 +92,11 @@ int main(int argc, char* argv[])
         ErrSys("inefficient parameters");
     }
     std::string supervisorAddress(argv[1]);
-    std::string workingDirectory(argv[2]);
+    std::string processId(argv[2]);
     // Daemonize("subprocess");
+    std::unique_ptr<AbstractSubprocess>
+        subprocess(new BinarySubprocess(supervisorAddress, processId));
+    subprocess->Run();
+    pause();
     return 0;
 }

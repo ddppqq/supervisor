@@ -4,16 +4,22 @@
 #define FRAMEWORK_SUPERVISOR_SUPERVISOR_SERVICE_IMPL_H
 
 #include <grpcpp/grpcpp.h>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "protocol/supervisor.grpc.pb.h"
 
 namespace framework {
 
+class AbstractNodeManager;
+class AbstractProcessDescriptor;
+
 class SupervisorServiceImpl final : public SupervisorService::Service
 {
 public:
     SupervisorServiceImpl();
-    ~SupervisorServiceImpl() {}
+    virtual ~SupervisorServiceImpl();
     ::grpc::Status Start(
             ::grpc::ServerContext* context,
             const ::LaunchProcessRequest* request,
@@ -26,6 +32,23 @@ public:
             ::grpc::ServerContext* context,
             const ::ListProcessesInfoRequest* request,
             ::ListProcessesInfoResponse* response);
+    ::grpc::Status Heartbeat(
+            ::grpc::ClientContext* context,
+            const ::HeartbeatRequest& request,
+            ::HeartbeatResponse* response);
+    ::grpc::Status Ping(
+            ::grpc::ServerContext* context,
+            const ::PingRequest* request,
+            ::PingResponse* response);
+    void Run();
+    void UpdateProcessesInfo();
+    void LaunchProcesses();
+    int64_t GetCurrentTimestampInMs();
+
+private:
+    std::unordered_map<std::string, AbstractProcessDescriptor*> mSubprocesses;
+    std::vector<ResourceInfo> mToBeLaunchedProcesses;
+    AbstractNodeManager* mNodeManager;
 };
 
 } // namespace framework

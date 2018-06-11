@@ -5,12 +5,14 @@
 #include <stdlib.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <grpcpp/server.h>
+#include <grpcpp/server_builder.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <iostream>
-#include "framework/supervisor/abstract_supervisor.h"
-#include "framework/supervisor/supervisor.h"
+#include "framework/supervisor/supervisor_service_impl.h"
 #include "protocol/common.pb.h"
+#include "protocol/supervisor.grpc.pb.h"
 
 using namespace framework;
 
@@ -91,8 +93,9 @@ int main(int argc, char* argv[])
 {
     std::cout << "Welcome to supervisor" << std::endl;
     // Daemonize("supervisor");
-    std::unique_ptr<AbstractSupervisor> supervisor(new Supervisor());
-    supervisor->Run();
+    std::unique_ptr<SupervisorServiceImpl>
+        service(new SupervisorServiceImpl());
+    service->Run();
     pause();
     return 0;
 }

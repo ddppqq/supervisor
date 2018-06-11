@@ -11,10 +11,31 @@ namespace framework {
 class AbstractSubprocess
 {
 public:
+    explicit AbstractSubprocess(
+            const std::string& parentIPPort,
+            const std::string& processId)
+    {
+        mProcessId = processId;
+        mParentIPPort = parentIPPort;
+    }
     virtual ~AbstractSubprocess() {}
-    virtual ProcessInfo Start() = 0;
-    virtual int Stop() = 0;
-    virtual ProcessInfo GetProcessInfo() = 0;
+    virtual void Run() = 0;
+    virtual bool SendHeartbeatToParent() = 0;
+    ProcessInfo GetProcessInfo()
+    {
+        // TODO(dai): fill out other info here
+        ProcessInfo info;
+        info.set_processid(mProcessId);
+        return info;
+    }
+    std::string GetParentIPPort()
+    {
+        return mParentIPPort;
+    }
+
+private:
+    std::string mParentIPPort;
+    std::string mProcessId;
 };
 
 } // namespace framework

@@ -14,7 +14,6 @@ def cpplintCheck(rootDir='..'):
                 x = os.system(cpplint + filename)
                 if (x != 0):
                     sys.exit()
-
 cpplintCheck()
 
 env = Environment(tools = ['default', 'protoc'])
@@ -46,6 +45,14 @@ supervisor_proto_files = env.Protoc(
     PROTOC_CCOUT='protocol/',
 )
 
+client = env.Program(
+    target = 'client',
+    source = [Glob('framework/client/*.cpp'),
+              Glob('protocol/*.o'),
+              ],
+    LIBS = ['protobuf', 'grpc++', 'grpc', 'grpc++_reflection', 'dl'],
+)
+
 supervisor = env.Program(
     target = 'supervisor',
     source = [Glob('framework/supervisor/*.cpp'),
@@ -59,7 +66,8 @@ supervisor = env.Program(
 subprocess = env.Program(
     target = 'subprocess',
     source = [Glob('framework/subprocess/*.cpp'),
-              'protocol/common.pb.o',
+              'framework/client/client.o',
+              Glob('protocol/*.o'),
               ],
     LIBS = ['protobuf', 'grpc++', 'grpc', 'grpc++_reflection', 'dl'],
 )
@@ -76,11 +84,20 @@ local_resource_loader_ut = env.Program(
     target = 'local_resource_loader_ut',
     source = ['unittest/local_resource_loader_ut.cpp',
               Glob('framework/common/local_filesystem.o'),
-              Glob('framework/nodemanager/local_resource_loader.cpp'),
+              Glob('framework/nodemanager/local_resource_loader.o'),
               Glob('protocol/common.pb.o'),
               'thirdparty/lib/gtest_main.a',
               'thirdparty/lib/gmock_main.a'],
     LIBS = ['protobuf'],
+        )
+
+local_fork_launcher_ut = env.Program(
+    target = 'local_fork_launcher_ut',
+    source = ['unittest/local_fork_launcher_ut.cpp',
+              'framework/nodemanager/local_fork_launcher.o',
+              Glob('framework/common/local_filesystem.o'),
+              'thirdparty/lib/gtest_main.a',
+              'thirdparty/lib/gmock_main.a'],
         )
 
 binary_subprocess_ut = env.Program(
@@ -90,8 +107,10 @@ binary_subprocess_ut = env.Program(
               'thirdparty/lib/gmock_main.a'],
         )
 
+env.Install('../bin/', client)
 env.Install('../bin/', supervisor)
 env.Install('../bin/', subprocess)
 env.Install('../bin/', local_filesystem_ut)
+env.Install('../bin/', local_fork_launcher_ut)
 env.Install('../bin/', local_resource_loader_ut)
 env.Install('../bin/', binary_subprocess_ut)

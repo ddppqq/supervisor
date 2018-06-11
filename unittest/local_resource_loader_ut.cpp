@@ -1,5 +1,6 @@
 // Copyright (c) 2018, DAI
 
+#include "framework/common/abstract_process_descriptor.h"
 #include "framework/common/local_filesystem.h"
 #include "framework/nodemanager/local_resource_loader.h"
 #include "gmock/gmock.h"
@@ -84,7 +85,6 @@ TEST(BinaryResourceLoader, LoadResource)
     CleanupResourceDirectory();
 }
 
-/*
 TEST(BinarySubprocessDescriptor, GetProcessId)
 {
     BinarySubprocessDescriptor descriptor1;
@@ -95,4 +95,3 @@ TEST(BinarySubprocessDescriptor, GetProcessId)
     EXPECT_TRUE(
             descriptor2.GetProcessId().find("binary_") != std::string::npos);
 }
-*/

@@ -12,7 +12,7 @@ class AbstractLauncher
 {
 public:
     virtual ~AbstractLauncher() {}
-    virtual bool Launch(
+    virtual int Launch(
             const std::string& entrance,
             const std::vector<std::string>& parameters) = 0;
 };

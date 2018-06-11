@@ -4,6 +4,7 @@
 #define FRAMEWORK_NODEMANAGER_NODE_MANAGER_H
 
 #include <string>
+#include <utility>
 #include "framework/nodemanager/abstract_launcher.h"
 #include "framework/nodemanager/abstract_nodemanager.h"
 #include "framework/nodemanager/abstract_resource_loader.h"
@@ -16,9 +17,9 @@ class NodeManager : public AbstractNodeManager
 public:
     NodeManager();
     ~NodeManager();
-    bool Launch(
+    std::pair<int, AbstractProcessDescriptor*> Launch(
             const std::string& supervisorAddress,
-            ResourceInfo resourceInfo);
+            const ResourceInfo& resourceInfo);
 
 private:
     AbstractResourceLoader* mResourceLoader;

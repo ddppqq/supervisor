@@ -19,16 +19,17 @@ NodeManager::~NodeManager()
     delete mLauncher;
 }
 
-bool NodeManager::Launch(
+std::pair<int, AbstractProcessDescriptor*> NodeManager::Launch(
         const std::string& supervisorAddress,
-        ResourceInfo resourceInfo)
+        const ResourceInfo& resourceInfo)
 {
     mResourceLoader->LoadResource(resourceInfo);
     const std::string& entrance = resourceInfo.entrance();
-    mLauncher->Launch(
+    AbstractProcessDescriptor* descriptor = new BinarySubprocessDescriptor();
+    int s = mLauncher->Launch(
             entrance,
-            std::vector<std::string> {supervisorAddress, resourceInfo.dstlocation()}); // NOLINT
-    return true;
+            std::vector<std::string> {supervisorAddress, descriptor->GetProcessId()}); // NOLINT
+    return std::pair<int, AbstractProcessDescriptor*>(s, descriptor);
 }
 
 } // namespace framework

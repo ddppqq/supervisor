@@ -13,7 +13,10 @@ bool CreateFile(const std::string& filePath)
         return false;
     }
     int fd = -1;
-    if ((fd = open(filePath.c_str(), O_CREAT | O_TRUNC | O_RDWR)) == -1) {
+    if ((fd = open(
+        filePath.c_str(),
+        O_CREAT | O_TRUNC | O_RDWR,
+        S_IRWXU)) == -1) {
         std::cout << strerror(errno) << std::endl;
         return false;
     }

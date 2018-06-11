@@ -13,9 +13,12 @@ class LocalForkLauncher : public AbstractLauncher
 {
 public:
     virtual ~LocalForkLauncher() {}
-    bool Launch(
+    int Launch(
             const std::string& entrance,
             const std::vector<std::string>& parameters);
+
+protected:
+    char** GetParameterList(const std::vector<std::string>& parameters);
 };
 
 } // namespace framework
